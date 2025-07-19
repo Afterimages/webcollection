@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>添加新收藏网站</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="upload-container">
+    <button class="upload-close" onclick="window.history.back()">✕</button>
+    <h1 class="upload-title">添加新收藏网站</h1>
+    <form class="upload-form" id="upload-form">
+      <label class="upload-label">截屏图片
+        <input type="file" accept="image/*" id="site-img" required />
+        <div class="img-preview" id="img-preview"></div>
+      </label>
+      <label class="upload-label">标题
+        <input type="text" id="site-title" maxlength="30" required placeholder="请输入网站名称" />
+      </label>
+      <label class="upload-label">网址
+        <input type="url" id="site-url" maxlength="200" required placeholder="请输入网站网址，如 https://example.com" />
+      </label>
+      <label class="upload-label">标签
+        <select id="site-tag" required>
+          <option value="免费">免费</option>
+          <option value="白嫖">白嫖</option>
+          <option value="收费">收费</option>
+        </select>
+      </label>
+      <label class="upload-label">网站印象笔记
+        <div id="editor-toolbar" class="editor-toolbar"></div>
+        <div id="editor" class="editor" contenteditable="true" spellcheck="false" placeholder="请输入网站印象笔记..."></div>
+      </label>
+      <button type="submit" class="upload-submit">确认上传</button>
+    </form>
+  </div>
+  <script src="upload.js"></script>
+</body>
+</html> 

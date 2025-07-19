@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网站印象笔记</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">🌈 收藏集</div>
+    <ul class="nav-categories">
+      <li class="nav-item">工具</li>
+      <li class="nav-item">学习</li>
+      <li class="nav-item">设计</li>
+      <li class="nav-item">效率</li>
+    </ul>
+  </nav>
+  <div class="note-container">
+    <button class="note-back" onclick="window.history.back()">← 返回</button>
+    <div class="note-url-row" id="note-url-row"></div>
+    <div class="note-content" id="note-content">
+      <!-- 笔记内容由 JS 动态生成 -->
+    </div>
+  </div>
+  <script src="note.js"></script>
+</body>
+</html> 

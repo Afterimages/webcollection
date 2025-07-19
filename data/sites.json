@@ -1,0 +1,29 @@
+[
+  {
+    "id": "palette-maker",
+    "name": "PaletteMaker",
+    "desc": "AI智能配色工具，轻松生成灵感色卡",
+    "tag": "免费",
+    "img": "PaletteMaker.png",
+    "url": "https://palettemaker.com",
+    "note": "<h1>PaletteMaker 使用体验</h1><p>PaletteMaker 是一款 <span class='highlight'>AI智能配色</span> 工具，界面 <span class='underline'>极其简洁</span>，操作流畅。</p><img src='data/images/PaletteMaker.png' alt='PaletteMaker 截屏' /><h2>优点</h2><ul><li>AI自动生成色卡，灵感丰富</li><li>支持导出多种格式</li><li>完全免费</li></ul><h2>适用场景</h2><p>推荐给 <span class='highlight'>设计师</span>、<span class='highlight'>前端开发者</span>，快速获取配色方案。</p>"
+  },
+  {
+    "id": "tongyi-tingwu",
+    "name": "通义听悟",
+    "desc": "阿里出品的AI语音转写与摘要工具",
+    "tag": "白嫖",
+    "img": "TongyiTingwu.png",
+    "url": "https://tingwu.aliyun.com",
+    "note": "<h1>通义听悟体验笔记</h1><p>阿里出品的 <span class='highlight'>AI语音转写</span> 工具，<span class='underline'>免费额度充足</span>。</p><img src='data/images/TongyiTingwu.png' alt='通义听悟 截屏' /><h2>亮点</h2><ul><li>音视频转文字，准确率高</li><li>自动摘要，省时省力</li><li>支持多平台同步</li></ul><h2>适用场景</h2><p>会议记录、学习笔记、采访整理等。</p>"
+  },
+  {
+    "id": "site-1752913637759",
+    "name": "snapany",
+    "tag": "免费",
+    "url": "https://snapany.com/zh/bilibili",
+    "img": "snapany_20250719.png",
+    "desc": "转换...",
+    "note": "<span style=\"font-weight: 400;\">转换</span>"
+  }
+]
