@@ -29,8 +29,8 @@ function createCard(site, isSelected) {
   card.innerHTML = `
     <div class="card-url-row"><a href="${site.url || '#'}" class="card-url" target="_blank" onclick="event.stopPropagation()">${site.url ? site.url.replace(/^https?:\/\//, '') : ''}</a></div>
     <div class="card-img-wrap">
+      <div class="card-bookmark card-tag-${site.tag}"><span class="bookmark-text">${site.tag}</span></div>
       <img src="${site.img}" alt="${site.name}" class="card-img" />
-      <span class="card-tag card-tag-${site.tag}">${site.tag}</span>
     </div>
     <div class="card-content">
       <div class="card-title">${site.name}</div>
