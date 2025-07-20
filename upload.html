@@ -21,6 +21,12 @@
       <label class="upload-label">网址
         <input type="url" id="site-url" maxlength="200" required placeholder="请输入网站网址，如 https://example.com" />
       </label>
+      <label class="upload-label">大分类
+        <select id="site-category" required></select>
+      </label>
+      <label class="upload-label">细分分类
+        <select id="site-subcategory" required></select>
+      </label>
       <label class="upload-label">标签
         <select id="site-tag" required>
           <option value="免费">免费</option>
@@ -36,5 +42,6 @@
     </form>
   </div>
   <script src="upload.js"></script>
+  <script src="categoryEnum.js"></script>
 </body>
 </html> 

@@ -26,9 +26,9 @@ app.get('/api/sites', (req, res) => {
 
 // 上传新收藏
 app.post('/api/upload', upload.single('img'), (req, res) => {
-  const { title, tag, note, url } = req.body;
+  const { title, tag, note, url, category, subcategory } = req.body;
   const imgFile = req.file;
-  if (!title || !tag || !note || !imgFile || !url) return res.status(400).send('参数不全');
+  if (!title || !tag || !note || !imgFile || !url || !category || !subcategory) return res.status(400).send('参数不全');
   const ext = path.extname(imgFile.originalname) || '.png';
   // 用标题名+日期生成图片文件名，去除特殊字符、空格
   const now = new Date();
@@ -43,6 +43,8 @@ app.post('/api/upload', upload.single('img'), (req, res) => {
     name: title,
     tag,
     url,
+    category,
+    subcategory,
     img: newImgName,
     desc: note.replace(/<[^>]+>/g, '').slice(0, 30) + '...',
     note

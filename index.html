@@ -9,25 +9,14 @@
 <body>
   <nav class="navbar">
     <div class="nav-logo">🌈 收藏集</div>
-    <ul class="nav-categories">
-      <li class="nav-item active">工具</li>
-      <li class="nav-item">学习</li>
-      <li class="nav-item">设计</li>
-      <li class="nav-item">效率</li>
-    </ul>
+    <ul class="nav-categories"></ul>
     <button class="nav-add">＋</button>
   </nav>
   <div id="dialog-mask" class="dialog-mask" style="display:none"></div>
   <div id="dialog-container" class="dialog-container" style="display:none"></div>
   <div class="container">
     <aside class="sidebar">
-      <ul class="sidebar-list">
-        <li class="sidebar-item active">全部</li>
-        <li class="sidebar-item">AI工具</li>
-        <li class="sidebar-item">前端开发</li>
-        <li class="sidebar-item">配色</li>
-        <li class="sidebar-item">图片处理</li>
-      </ul>
+      <ul class="sidebar-list"></ul>
     </aside>
     <main class="main-content">
       <div class="card-list" id="card-list">
@@ -35,6 +24,7 @@
       </div>
     </main>
   </div>
+  <script src="categoryEnum.js"></script>
   <script src="main.js"></script>
 </body>
 </html> 

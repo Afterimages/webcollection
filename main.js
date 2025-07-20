@@ -93,11 +93,21 @@ function clearSelect() {
   renderBatchBar();
 }
 
+let currentCategory = window.CATEGORY_ENUM && window.CATEGORY_ENUM[0] ? window.CATEGORY_ENUM[0].name : '';
+let currentSubcategory = '全部';
+
 function renderCards() {
   const cardList = document.getElementById('card-list');
   cardList.innerHTML = '';
   getAllSites().then(allSites => {
-    allSites.forEach(site => {
+    let filtered = allSites;
+    if (currentCategory && currentCategory !== '全部') {
+      filtered = filtered.filter(site => site.category === currentCategory);
+    }
+    if (currentSubcategory && currentSubcategory !== '全部') {
+      filtered = filtered.filter(site => site.subcategory === currentSubcategory);
+    }
+    filtered.forEach(site => {
       cardList.appendChild(createCard(site, selectedIds.includes(site.id)));
     });
   });
@@ -135,6 +145,54 @@ function selectAll() {
     renderCards();
     renderBatchBar();
   });
+}
+
+// 分类点击事件
+function setupCategoryFilter() {
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.onclick = function() {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+      currentCategory = this.textContent.trim();
+      currentSubcategory = '全部';
+      renderSidebar(currentCategory);
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      document.querySelector('.sidebar-item').classList.add('active'); // 全部
+      renderCards();
+      setupSidebarFilter();
+    };
+  });
+  setupSidebarFilter();
+}
+function setupSidebarFilter() {
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.onclick = function() {
+      document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+      currentSubcategory = this.textContent.trim();
+      renderCards();
+    };
+  });
+}
+
+// 动态渲染分类导航和侧边栏
+function renderCategoryNav() {
+  if (!window.CATEGORY_ENUM) return;
+  const nav = document.querySelector('.nav-categories');
+  nav.innerHTML = window.CATEGORY_ENUM.map(cat => `<li class="nav-item">${cat.name}</li>`).join('');
+  renderSidebar(window.CATEGORY_ENUM[0]?.name || '');
+}
+function renderSidebar(category) {
+  const sidebar = document.querySelector('.sidebar-list');
+  if (!category) {
+    sidebar.innerHTML = '';
+    return;
+  }
+  sidebar.innerHTML = '<li class="sidebar-item active">全部</li>';
+  const cat = window.CATEGORY_ENUM.find(c => c.name === category);
+  if (cat) {
+    sidebar.innerHTML += cat.sub.map(sub => `<li class="sidebar-item">${sub}</li>`).join('');
+  }
 }
 
 // 弹窗管理
@@ -179,6 +237,19 @@ function showEditDialog(site) {
     <form id='edit-form'>
       <label>标题<input type='text' name='title' value='${site.name.replace(/'/g, '&#39;')}' maxlength='30' required style='width:100%;margin:0.5em 0 1em 0;'/></label>
       <label>网址<input type='url' name='url' value='${site.url ? site.url.replace(/'/g, '&#39;') : ''}' maxlength='200' required placeholder='请输入网站网址，如 https://example.com' style='width:100%;margin-bottom:1em;'/></label>
+      <label>大分类<select name='category' style='width:100%;margin-bottom:1em;' required>
+        <option value='工具' ${site.category==='工具'?'selected':''}>工具</option>
+        <option value='学习' ${site.category==='学习'?'selected':''}>学习</option>
+        <option value='设计' ${site.category==='设计'?'selected':''}>设计</option>
+        <option value='效率' ${site.category==='效率'?'selected':''}>效率</option>
+      </select></label>
+      <label>细分分类<select name='subcategory' style='width:100%;margin-bottom:1em;' required>
+        <option value='AI工具' ${site.subcategory==='AI工具'?'selected':''}>AI工具</option>
+        <option value='前端开发' ${site.subcategory==='前端开发'?'selected':''}>前端开发</option>
+        <option value='配色' ${site.subcategory==='配色'?'selected':''}>配色</option>
+        <option value='图片处理' ${site.subcategory==='图片处理'?'selected':''}>图片处理</option>
+        <option value='视频处理' ${site.subcategory==='视频处理'?'selected':''}>视频处理</option>
+      </select></label>
       <label>标签<select name='tag' style='width:100%;margin-bottom:1em;'>
         <option value='免费' ${site.tag==='免费'?'selected':''}>免费</option>
         <option value='白嫖' ${site.tag==='白嫖'?'selected':''}>白嫖</option>
@@ -260,6 +331,8 @@ function showEditDialog(site) {
 window.showEditDialog = showEditDialog;
 
 document.addEventListener('DOMContentLoaded', () => {
+  renderCategoryNav();
+  setupCategoryFilter();
   renderCards();
   // 添加按钮跳转
   const addBtn = document.querySelector('.nav-add');

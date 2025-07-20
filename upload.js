@@ -50,6 +50,20 @@ tools.forEach(tool => {
   toolbar.appendChild(btn);
 });
 
+// 动态渲染分类下拉框
+function renderCategorySelect() {
+  const categorySelect = document.getElementById('site-category');
+  const subcategorySelect = document.getElementById('site-subcategory');
+  if (!window.CATEGORY_ENUM) return;
+  categorySelect.innerHTML = window.CATEGORY_ENUM.map((cat, i) => `<option value="${cat.name}"${i===0?' selected':''}>${cat.name}</option>`).join('');
+  function renderSub(catName) {
+    const cat = window.CATEGORY_ENUM.find(c => c.name === catName) || window.CATEGORY_ENUM[0];
+    subcategorySelect.innerHTML = cat.sub.map((s, i) => `<option value="${s}"${i===0?' selected':''}>${s}</option>`).join('');
+  }
+  renderSub(categorySelect.value);
+  categorySelect.onchange = () => renderSub(categorySelect.value);
+}
+
 // 表单提交
 const form = document.getElementById('upload-form');
 form.addEventListener('submit', function(e) {
@@ -59,7 +73,9 @@ form.addEventListener('submit', function(e) {
   const tag = document.getElementById('site-tag').value;
   const note = editor.innerHTML.trim();
   const url = document.getElementById('site-url').value.trim();
-  if (!file || !title || !tag || !note || !url) {
+  const category = document.getElementById('site-category').value;
+  const subcategory = document.getElementById('site-subcategory').value;
+  if (!file || !title || !tag || !note || !url || !category || !subcategory) {
     alert('请完整填写所有内容');
     return;
   }
@@ -69,6 +85,8 @@ form.addEventListener('submit', function(e) {
   formData.append('tag', tag);
   formData.append('note', note);
   formData.append('url', url);
+  formData.append('category', category);
+  formData.append('subcategory', subcategory);
   fetch('http://localhost:3000/api/upload', {
     method: 'POST',
     body: formData
@@ -88,4 +106,8 @@ form.addEventListener('submit', function(e) {
     .catch(() => {
       alert('上传失败，请检查服务端是否启动');
     });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.CATEGORY_ENUM) renderCategorySelect();
 }); 
