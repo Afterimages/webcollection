@@ -1,3 +1,4 @@
+(function() {
 // 示例数据，实际应从 /data 目录动态加载
 const sites = [
   {
@@ -256,6 +257,7 @@ function showEditDialog(site) {
       .catch(() => { alert('保存失败'); });
   };
 }
+window.showEditDialog = showEditDialog;
 
 document.addEventListener('DOMContentLoaded', () => {
   renderCards();
@@ -266,4 +268,5 @@ document.addEventListener('DOMContentLoaded', () => {
       window.location.href = 'upload.html';
     });
   }
-}); 
+});
+})(); 

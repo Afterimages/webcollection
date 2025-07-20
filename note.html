@@ -18,11 +18,15 @@
   </nav>
   <div class="note-container">
     <button class="note-back" onclick="window.history.back()">← 返回</button>
+    <button class="note-edit" id="note-edit-btn" title="编辑">✎</button>
     <div class="note-url-row" id="note-url-row"></div>
     <div class="note-content" id="note-content">
       <!-- 笔记内容由 JS 动态生成 -->
     </div>
   </div>
+  <div id="dialog-mask" class="dialog-mask" style="display:none"></div>
+  <div id="dialog-container" class="dialog-container" style="display:none"></div>
   <script src="note.js"></script>
+  <script src="main.js"></script>
 </body>
 </html> 

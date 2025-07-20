@@ -72,4 +72,21 @@ function renderNote() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', renderNote); 
+document.addEventListener('DOMContentLoaded', () => {
+  renderNote();
+  // 编辑按钮弹窗
+  const editBtn = document.getElementById('note-edit-btn');
+  if (editBtn) {
+    editBtn.onclick = function() {
+      getAllSites().then(allSites => {
+        const id = getQueryParam('id');
+        const site = allSites.find(s => s.id === id);
+        if (site) {
+          showEditDialog(site);
+        } else {
+          alert('未找到该收藏网站');
+        }
+      });
+    };
+  }
+}); 
