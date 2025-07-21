@@ -80,6 +80,22 @@ function clearSelect() {
 
 let currentCategory = window.CATEGORY_ENUM && window.CATEGORY_ENUM[0] ? window.CATEGORY_ENUM[0].name : '';
 let currentSubcategory = '全部';
+let currentTag = '全部';
+
+function renderTagFilterBar() {
+  const bar = document.getElementById('tag-filter-bar');
+  const tags = ['全部', '免费', '收费', '白嫖'];
+  bar.innerHTML = tags.map(tag =>
+    `<button class="tag-filter-btn${currentTag === tag ? ' active' : ''}" data-tag="${tag}">${tag}</button>`
+  ).join('');
+  bar.querySelectorAll('.tag-filter-btn').forEach(btn => {
+    btn.onclick = function() {
+      currentTag = this.getAttribute('data-tag');
+      renderTagFilterBar();
+      renderCards();
+    };
+  });
+}
 
 function renderCards() {
   const cardList = document.getElementById('card-list');
@@ -91,6 +107,9 @@ function renderCards() {
     }
     if (currentSubcategory && currentSubcategory !== '全部') {
       filtered = filtered.filter(site => site.subcategory === currentSubcategory);
+    }
+    if (currentTag && currentTag !== '全部') {
+      filtered = filtered.filter(site => site.tag === currentTag);
     }
     filtered.forEach(site => {
       cardList.appendChild(createCard(site, selectedIds.includes(site.id)));
@@ -376,6 +395,7 @@ window.showEditDialog = showEditDialog;
 document.addEventListener('DOMContentLoaded', () => {
   renderCategoryNav();
   setupCategoryFilter();
+  renderTagFilterBar();
   renderCards();
   enableCategoryDrop();
   // 添加按钮跳转

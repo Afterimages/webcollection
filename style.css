@@ -591,10 +591,20 @@ body {
   max-width: 90vw;
   padding: 2.2em 2em 1.5em 2em;
   animation: dialogPop 0.3s;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 @keyframes dialogPop {
   from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
   to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@media (max-width: 480px) {
+  .dialog-container {
+    min-width: 0;
+    max-width: 98vw;
+    padding: 1.2em 0.5em 1em 0.5em;
+    max-height: 90vh;
+  }
 }
 .card-actions {
   display: flex;
@@ -912,4 +922,26 @@ body {
   color: #fff !important;
   box-shadow: 0 0 0 3px #7ed6df55;
   transition: background 0.2s, color 0.2s;
+} 
+.tag-filter-bar {
+  display: flex;
+  gap: 1.2em;
+  margin-bottom: 1.5em;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.tag-filter-btn {
+  background: #fbf2d2;
+  color: #e87ea1;
+  border: none;
+  border-radius: 16px;
+  padding: 0.4em 1.3em;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.tag-filter-btn.active, .tag-filter-btn:hover {
+  background: #e87ea1;
+  color: #fff;
 } 
