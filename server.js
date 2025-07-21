@@ -82,13 +82,16 @@ app.put('/api/site/:id', upload.single('img'), checkToken, (req, res) => {
   let sites = fs.existsSync(SITES_PATH) ? JSON.parse(fs.readFileSync(SITES_PATH)) : [];
   const idx = sites.findIndex(s => s.id === id);
   if (idx === -1) return res.status(404).send('未找到该收藏');
-  const { title, tag, note } = req.body;
+  const { title, tag, note, category, subcategory, url } = req.body;
   if (title) sites[idx].name = title.slice(0, 30);
   if (tag) sites[idx].tag = tag;
   if (note) {
     sites[idx].note = note;
     sites[idx].desc = note.replace(/<[^>]+>/g, '').slice(0, 30) + '...';
   }
+  if (category) sites[idx].category = category;
+  if (subcategory) sites[idx].subcategory = subcategory;
+  if (url) sites[idx].url = url;
   // 图片更新
   if (req.file) {
     // 校验图片类型

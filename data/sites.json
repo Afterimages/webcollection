@@ -2,11 +2,11 @@
   {
     "id": "palette-maker",
     "name": "PaletteMaker",
-    "desc": "AI智能配色工具，轻松生成灵感色卡",
+    "desc": "PaletteMaker 使用体验PaletteMaker ...",
     "tag": "免费",
     "img": "PaletteMaker.png",
     "url": "https://palettemaker.com",
-    "category": "工具",
+    "category": "设计",
     "subcategory": "配色",
     "note": "<h1>PaletteMaker 使用体验</h1><p>PaletteMaker 是一款 <span class='highlight'>AI智能配色</span> 工具，界面 <span class='underline'>极其简洁</span>，操作流畅。</p><img src='data/images/PaletteMaker.png' alt='PaletteMaker 截屏' /><h2>优点</h2><ul><li>AI自动生成色卡，灵感丰富</li><li>支持导出多种格式</li><li>完全免费</li></ul><h2>适用场景</h2><p>推荐给 <span class='highlight'>设计师</span>、<span class='highlight'>前端开发者</span>，快速获取配色方案。</p>"
   },
@@ -25,7 +25,7 @@
     "id": "site-1752893751459",
     "name": "snapany",
     "tag": "免费",
-    "img": "c707815e5dbfc9b6c28392f01c836de3.png",
+    "img": "snapany_20250719.png",
     "url": "https://snapany.com",
     "category": "工具",
     "subcategory": "视频处理",

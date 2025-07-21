@@ -907,3 +907,9 @@ body {
     margin: 0 0.3rem;
   }
 } 
+.nav-item.drag-over, .sidebar-item.drag-over {
+  background: #7ed6df !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 3px #7ed6df55;
+  transition: background 0.2s, color 0.2s;
+} 

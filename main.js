@@ -1,29 +1,14 @@
 (function() {
-// 示例数据，实际应从 /data 目录动态加载
-const sites = [
-  {
-    id: 'palette-maker',
-    name: 'PaletteMaker',
-    desc: 'AI智能配色工具，轻松生成灵感色卡',
-    tag: '免费',
-    img: 'data/images/PaletteMaker.png',
-    note: 'PaletteMaker 是一款非常好用的配色工具，支持AI自动生成色卡，界面简洁，适合设计师和前端开发者。',
-  },
-  {
-    id: 'tongyi-tingwu',
-    name: '通义听悟',
-    desc: '阿里出品的AI语音转写与摘要工具',
-    tag: '白嫖',
-    img: 'data/images/TongyiTingwu.png',
-    note: '通义听悟支持音视频转文字，自动摘要，免费额度充足，适合会议记录和学习笔记。',
-  },
-];
 
-const API_TOKEN = 'your_secret_token';
+const API_TOKEN = window.API_TOKEN;
 
 function createCard(site, isSelected) {
   const card = document.createElement('div');
   card.className = 'site-card' + (isSelected ? ' batch-selected' : '');
+  card.draggable = true;
+  card.ondragstart = (e) => {
+    e.dataTransfer.setData('text/plain', site.id);
+  };
   card.onclick = () => {
     window.location.href = `note.html?id=${site.id}`;
   };
@@ -175,12 +160,69 @@ function setupSidebarFilter() {
   });
 }
 
+function enableCategoryDrop() {
+  // 导航栏
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.ondragover = e => { e.preventDefault(); item.classList.add('drag-over'); };
+    item.ondragleave = () => item.classList.remove('drag-over');
+    item.ondrop = function(e) {
+      e.preventDefault();
+      item.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain');
+      const newCategory = this.textContent.trim();
+      updateCardCategory(id, newCategory, null);
+    };
+  });
+  // 侧边栏
+  document.querySelectorAll('.sidebar-item').forEach(item => {
+    item.ondragover = e => { e.preventDefault(); item.classList.add('drag-over'); };
+    item.ondragleave = () => item.classList.remove('drag-over');
+    item.ondrop = function(e) {
+      e.preventDefault();
+      item.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain');
+      const newSubcategory = this.textContent.trim();
+      if (newSubcategory === '全部') return;
+      let newCategory = '';
+      for (const cat of window.CATEGORY_ENUM) {
+        if (cat.sub.includes(newSubcategory)) {
+          newCategory = cat.name;
+          break;
+        }
+      }
+      updateCardCategory(id, newCategory, newSubcategory);
+    };
+  });
+}
+
+function updateCardCategory(id, newCategory, newSubcategory) {
+  getAllSites().then(allSites => {
+    const site = allSites.find(s => s.id === id);
+    if (!site) return;
+    const fd = new FormData();
+    fd.append('category', newCategory || site.category);
+    fd.append('subcategory', newSubcategory || site.subcategory);
+    fd.append('title', site.name);
+    fd.append('url', site.url);
+    fd.append('tag', site.tag);
+    fd.append('note', site.note);
+    fetch(`http://localhost:3000/api/site/${id}?token=${API_TOKEN}`, {
+      method: 'PUT',
+      body: fd
+    })
+      .then(res => res.json())
+      .then(() => { renderCards(); })
+      .catch(() => { alert('分类修改失败'); });
+  });
+}
+
 // 动态渲染分类导航和侧边栏
 function renderCategoryNav() {
   if (!window.CATEGORY_ENUM) return;
   const nav = document.querySelector('.nav-categories');
   nav.innerHTML = window.CATEGORY_ENUM.map(cat => `<li class="nav-item">${cat.name}</li>`).join('');
   renderSidebar(window.CATEGORY_ENUM[0]?.name || '');
+  enableCategoryDrop();
 }
 function renderSidebar(category) {
   const sidebar = document.querySelector('.sidebar-list');
@@ -193,6 +235,7 @@ function renderSidebar(category) {
   if (cat) {
     sidebar.innerHTML += cat.sub.map(sub => `<li class="sidebar-item">${sub}</li>`).join('');
   }
+  enableCategoryDrop();
 }
 
 // 弹窗管理
@@ -334,6 +377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCategoryNav();
   setupCategoryFilter();
   renderCards();
+  enableCategoryDrop();
   // 添加按钮跳转
   const addBtn = document.querySelector('.nav-add');
   if (addBtn) {
