@@ -31,19 +31,19 @@ function createCard(site, isSelected) {
   selectBox.onclick = (e) => { e.stopPropagation(); toggleSelect(site.id); };
   card.appendChild(selectBox);
   // 管理按钮（所有卡片都显示）
-  const actions = document.createElement('div');
-  actions.className = 'card-actions';
-  const editBtn = document.createElement('button');
-  editBtn.className = 'card-btn';
-  editBtn.textContent = '编辑';
-  editBtn.onclick = (e) => { e.stopPropagation(); showEditDialog(site); };
-  const delBtn = document.createElement('button');
-  delBtn.className = 'card-btn';
-  delBtn.textContent = '删除';
-  delBtn.onclick = (e) => { e.stopPropagation(); showDeleteDialog(site); };
-  actions.appendChild(editBtn);
-  actions.appendChild(delBtn);
-  card.appendChild(actions);
+  // const actions = document.createElement('div');
+  // actions.className = 'card-actions';
+  // const editBtn = document.createElement('button');
+  // editBtn.className = 'card-btn';
+  // editBtn.textContent = '编辑';
+  // editBtn.onclick = (e) => { e.stopPropagation(); showEditDialog(site); };
+  // const delBtn = document.createElement('button');
+  // delBtn.className = 'card-btn';
+  // delBtn.textContent = '删除';
+  // delBtn.onclick = (e) => { e.stopPropagation(); showDeleteDialog(site); };
+  // actions.appendChild(editBtn);
+  // actions.appendChild(delBtn);
+  // card.appendChild(actions);
   return card;
 }
 
