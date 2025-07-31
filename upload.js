@@ -100,14 +100,22 @@ form.addEventListener('submit', function(e) {
         window.close && window.close();
       } else {
         window.location.href = 'index.html';
-        window.location.reload();
       }
     })
     .catch(() => {
-      alert('上传失败，请检查服务端是否启动');
+      alert('上传失败，请重试');
     });
 });
 
+// 添加按钮跳转
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.CATEGORY_ENUM) renderCategorySelect();
+  const addBtn = document.querySelector('.nav-add');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      window.location.href = 'upload.html';
+    });
+  }
+  
+  // 渲染分类下拉框
+  renderCategorySelect();
 }); 

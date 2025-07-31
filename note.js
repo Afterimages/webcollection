@@ -36,6 +36,7 @@ function renderNote() {
 
 document.addEventListener('DOMContentLoaded', () => {
   renderNote();
+  
   // 编辑按钮弹窗
   const editBtn = document.getElementById('note-edit-btn');
   if (editBtn) {
@@ -50,5 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     };
+  }
+  
+  // 添加按钮跳转
+  const addBtn = document.querySelector('.nav-add');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      window.location.href = 'upload.html';
+    });
   }
 }); 
