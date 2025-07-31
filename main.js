@@ -57,8 +57,28 @@ function getAllSites() {
       }));
     })
     .catch(() => {
-      const localSites = JSON.parse(localStorage.getItem('sites') || '[]');
-      return [...sites, ...localSites];
+      // 回退到本地数据
+      try {
+        const localSites = JSON.parse(localStorage.getItem('sites') || '[]');
+        // 如果没有本地数据，尝试从sites.json文件读取
+        if (localSites.length === 0) {
+          // 尝试从本地文件读取
+          return fetch('./data/sites.json')
+            .then(res => res.json())
+            .then(sites => sites.map(site => ({
+              ...site,
+              img: site.img.startsWith('data:') ? site.img : `data/images/${site.img}`
+            })))
+            .catch(() => []);
+        }
+        return localSites.map(site => ({
+          ...site,
+          img: site.img.startsWith('data:') ? site.img : `data/images/${site.img}`
+        }));
+      } catch (error) {
+        console.error('Failed to load sites:', error);
+        return [];
+      }
     });
 }
 
@@ -102,7 +122,8 @@ function renderCards() {
   cardList.innerHTML = '';
   getAllSites().then(allSites => {
     let filtered = allSites;
-    if (currentCategory && currentCategory !== '全部') {
+    // 修复过滤逻辑：当currentCategory为空或为'全部'时，显示所有卡片
+    if (currentCategory && currentCategory !== '全部' && currentCategory !== '') {
       filtered = filtered.filter(site => site.category === currentCategory);
     }
     if (currentSubcategory && currentSubcategory !== '全部') {
@@ -111,9 +132,12 @@ function renderCards() {
     if (currentTag && currentTag !== '全部') {
       filtered = filtered.filter(site => site.tag === currentTag);
     }
+    
     filtered.forEach(site => {
       cardList.appendChild(createCard(site, selectedIds.includes(site.id)));
     });
+  }).catch(error => {
+    console.error('Error loading sites:', error);
   });
 }
 
@@ -392,12 +416,81 @@ function showEditDialog(site) {
 }
 window.showEditDialog = showEditDialog;
 
+// ========== 新的两级侧边栏渲染和切换 ========== //
+function renderMainSidebar() {
+  const mainList = document.querySelector('.main-sidebar-list');
+  // 如果currentCategory为空，默认激活第一个分类
+  if (!currentCategory && window.CATEGORY_ENUM && window.CATEGORY_ENUM.length > 0) {
+    currentCategory = window.CATEGORY_ENUM[0].name;
+  }
+  
+  // 确保currentCategory有值
+  if (!currentCategory) {
+    currentCategory = window.CATEGORY_ENUM && window.CATEGORY_ENUM.length > 0 ? window.CATEGORY_ENUM[0].name : '';
+  }
+  
+  mainList.innerHTML = window.CATEGORY_ENUM.map(cat => `
+    <li class="main-sidebar-item${currentCategory === cat.name ? ' active' : ''}" data-category="${cat.name}">${cat.name}</li>
+  `).join('');
+  // 绑定点击事件
+  mainList.querySelectorAll('.main-sidebar-item').forEach(item => {
+    item.onclick = function() {
+      currentCategory = this.getAttribute('data-category');
+      currentSubcategory = '全部';
+      // 重新渲染主侧边栏以保持激活状态
+      renderMainSidebar();
+      renderSubSidebar();
+      renderCards();
+    };
+  });
+}
+
+function renderSubSidebar() {
+  const subList = document.querySelector('.sub-sidebar-list');
+  let cat = window.CATEGORY_ENUM.find(c => c.name === currentCategory);
+  
+  // 如果当前分类为空或找不到，使用第一个分类
+  if (!cat && window.CATEGORY_ENUM && window.CATEGORY_ENUM.length > 0) {
+    cat = window.CATEGORY_ENUM[0];
+    currentCategory = cat.name;
+  }
+  
+  let html = '<li class="sub-sidebar-item' + (currentSubcategory === '全部' ? ' active' : '') + '" data-sub="全部">全部</li>';
+  if (cat && cat.sub) {
+    html += cat.sub.map(sub => `
+      <li class="sub-sidebar-item${currentSubcategory === sub ? ' active' : ''}" data-sub="${sub}">${sub}</li>
+    `).join('');
+  }
+  
+  subList.innerHTML = html;
+  
+  // 绑定点击事件
+  subList.querySelectorAll('.sub-sidebar-item').forEach(item => {
+    item.onclick = function() {
+      document.querySelectorAll('.sub-sidebar-item').forEach(i => i.classList.remove('active'));
+      this.classList.add('active');
+      currentSubcategory = this.getAttribute('data-sub');
+      // 重新渲染主侧边栏以保持激活状态
+      renderMainSidebar();
+      renderCards();
+    };
+  });
+}
+
+// ========== 初始化入口调整 ========== //
 document.addEventListener('DOMContentLoaded', () => {
-  renderCategoryNav();
-  setupCategoryFilter();
+  // 确保有默认的分类选择
+  if (!currentCategory && window.CATEGORY_ENUM && window.CATEGORY_ENUM.length > 0) {
+    currentCategory = window.CATEGORY_ENUM[0].name;
+  }
+  
+  // 先渲染主侧边栏，确保有默认分类
+  renderMainSidebar();
+  // 再渲染子侧边栏
+  renderSubSidebar();
   renderTagFilterBar();
   renderCards();
-  enableCategoryDrop();
+  
   // 添加按钮跳转
   const addBtn = document.querySelector('.nav-add');
   if (addBtn) {
